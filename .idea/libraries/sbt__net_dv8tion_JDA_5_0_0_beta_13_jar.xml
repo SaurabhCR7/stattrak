@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="sbt: net.dv8tion:JDA:5.0.0-beta.13:jar" external-system-id="SBT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/net/dv8tion/JDA/5.0.0-beta.13/JDA-5.0.0-beta.13.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/net/dv8tion/JDA/5.0.0-beta.13/JDA-5.0.0-beta.13-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/net/dv8tion/JDA/5.0.0-beta.13/JDA-5.0.0-beta.13-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
