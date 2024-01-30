@@ -1,1 +1,7 @@
 src/main/scala/clients/.env
+
+/target
+/project
+
+/.idea
+/.bsp
