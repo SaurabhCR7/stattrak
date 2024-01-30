@@ -1,11 +1,12 @@
 package com.stattrak
 package api
 
-import api.dto.{MatchResponse, PatchResponse, RankResponse}
-import models.User
-import utils.Logging
-
-import io.circe.parser
+import com.stattrak.api.dto.{MatchResponse, PatchResponse, RankResponse}
+import com.stattrak.models.User
+import com.stattrak.utils.Logging
+import io.circe.generic.auto.*
+import io.circe.{parser, *}
+import io.circe.parser.*
 
 import scala.io.Source
 
@@ -13,18 +14,20 @@ object ValorantApi extends Logging {
   // This is to avoid exceeding api rate limits
   private val delayInMs = 200
 
-  def fetchLastMatch(user: User): MatchResponse = try {
-    val url = getCompetitiveApiUrl(user)
-    Thread.sleep(delayInMs)
-    val source = Source.fromURL(url)
-    val jsonString = source.mkString
-    val response = parseJsonResponse[MatchResponse](jsonString)
-    source.close()
-    response
-  } catch {
-    case e: Exception =>
-      error("Failed to fetch match data from api with error : ", e)
-      null
+  def fetchLastMatch(user: User): MatchResponse = {
+    try {
+      val url = getCompetitiveApiUrl(user)
+      Thread.sleep(delayInMs)
+      val source = Source.fromURL(url)
+      val jsonString = source.mkString
+      val response = parseJson[MatchResponse](jsonString)
+      source.close()
+      response
+    } catch {
+      case e: Exception =>
+        error("Failed to fetch match data from api with error : ", e)
+        null
+    }
   }
 
   def fetchRank(user: User): RankResponse = try {
@@ -32,7 +35,7 @@ object ValorantApi extends Logging {
     Thread.sleep(delayInMs)
     val source = Source.fromURL(url)
     val jsonString = source.mkString
-    val response = parseJsonResponse[RankResponse](jsonString)
+    val response = parseJson[RankResponse](jsonString)
     source.close()
     response
   } catch {
@@ -41,21 +44,19 @@ object ValorantApi extends Logging {
       null
   }
 
-  def isUserValid(user: User): Boolean = try {
-    info(s"User is valid : $user")
-    val url = getRankApiUrl(user)
-    val source = Source.fromURL(url)
-    info(s"Source : $source")
-    val jsonString = source.mkString
-    info(s"Json String $jsonString")
-    val response = parseJsonResponse[RankResponse](jsonString)
-    source.close()
-    info(s"Response $response")
-    response.status == 200
-  } catch {
-    case e: Exception => 
-      error(s"Error while validating user $user", e)
-      false
+  def isUserValid(user: User): Boolean = {
+    try {
+      val url = getRankApiUrl(user)
+      val source = Source.fromURL(url)
+      val jsonString = source.mkString
+      val response = parseJson[RankResponse](jsonString)
+      source.close()
+      response.status == 200
+    } catch {
+      case e: Exception =>
+        error(s"Error while validating user $user", e)
+        false
+    }
   }
 
   def fetchPatch: PatchResponse = try {
@@ -63,7 +64,7 @@ object ValorantApi extends Logging {
     Thread.sleep(delayInMs)
     val source = Source.fromURL(url)
     val jsonString = source.mkString
-    val response = parseJsonResponse[PatchResponse](jsonString)
+    val response = parseJson[PatchResponse](jsonString)
     source.close()
     response
   } catch {
@@ -72,10 +73,14 @@ object ValorantApi extends Logging {
       null
   }
 
-  private def parseJsonResponse[T](jsonString: String): T = {
+  private def parseJson[T: Decoder](jsonString: String): T = {
     parser.parse(jsonString) match {
       case Left(error) => throw new IllegalArgumentException(s"Invalid JSON object: ${error.message}")
-      case Right(json) => json.asInstanceOf[T]
+      case Right(json) => json.as[T] match {
+        case Left(decodingError) => 
+          throw new IllegalArgumentException(s"Failed to decode JSON: ${decodingError.message}")
+        case Right(result) => result
+      }
     }
   }
 

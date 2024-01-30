@@ -16,7 +16,7 @@ object Cache extends Logging {
     ScyllaDbClient.getAllUsersWithData.map {
       case (user, userdata) => cache.put(user, userdata)
     }
-    info(s"Finished warming up cache with size ${cache.size()}")
+    info(s"Finished warming up cache with size $cache")
   }
 
   def add(user: User, userdata: Userdata): Unit = {
@@ -30,7 +30,7 @@ object Cache extends Logging {
   }
   
   def isPresent(user: User): Boolean = {
-    cache.contains(user)
+    cache.containsKey(user)
   }
 
 }

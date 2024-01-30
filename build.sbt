@@ -14,5 +14,8 @@ libraryDependencies ++= Seq(
   "org.slf4j" % "slf4j-api" % "2.0.7",
   "com.github.ben-manes.caffeine" % "caffeine" % "3.1.8",
   "io.circe" %% "circe-parser" % "0.14.5",
+  "io.circe" %% "circe-generic" % "0.14.5",
   "com.scylladb" % "java-driver-core" % "4.15.0.1"
 )
+
+scalacOptions += "-Xmax-inlines:50"
