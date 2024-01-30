@@ -1,4 +1,4 @@
-src/main/scala/clients/.env
+.env
 
 /target
 /project

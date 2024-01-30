@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.{JDA, JDABuilder}
 import scala.io.Source
 
 object DiscordClient extends ListenerAdapter with Logging {
-  private val source = Source.fromFile("src/main/scala/clients/.env")
+  private val source = Source.fromFile(".env")
   private val discordToken = source.getLines().next()
   source.close()
 
