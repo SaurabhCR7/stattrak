@@ -1,5 +1,5 @@
 package com.stattrak
-package cache
+package store
 
 import db.ScyllaDbClient
 import models.{User, Userdata}
@@ -7,16 +7,16 @@ import utils.Logging
 
 import java.util.concurrent.ConcurrentHashMap
 
-object Cache extends Logging {
+object UserStore extends Logging {
   private val cacheSize = 1000
-  private val cache = new ConcurrentHashMap[User, Userdata]()
+  val cache = new ConcurrentHashMap[User, Userdata]()
   
   def apply(): Unit = {
-    info("Started cache warmup")
+    info("Started store warmup")
     ScyllaDbClient.getAllUsersWithData.map {
       case (user, userdata) => cache.put(user, userdata)
     }
-    info(s"Finished warming up cache with size $cache")
+    info(s"Finished warming up store with size ${cache.size()}")
   }
 
   def add(user: User, userdata: Userdata): Unit = {
@@ -32,5 +32,9 @@ object Cache extends Logging {
   def isPresent(user: User): Boolean = {
     cache.containsKey(user)
   }
-
+  
+  def updateMatchId(user: User, userdata: Userdata): Unit = {
+    ScyllaDbClient.updateMatchId(user, userdata.matchId)
+    cache.put(user, userdata)
+  }
 }

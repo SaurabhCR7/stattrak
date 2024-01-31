@@ -1,11 +1,10 @@
 package com.stattrak
 package db
 
-import models.{User, Userdata}
-import utils.Logging
-
 import com.datastax.oss.driver.api.core.CqlSession
 import com.datastax.oss.driver.api.core.cql.Row
+import com.stattrak.models.{User, Userdata}
+import com.stattrak.utils.Logging
 
 import scala.jdk.CollectionConverters.*
 
@@ -63,6 +62,18 @@ object ScyllaDbClient extends Logging {
     } catch {
       case ex: Exception =>
         error(s"Failed to remove user $user in Database with error : ", ex)
+        throw ex
+    }
+  }
+
+  def updateMatchId(user: User, matchId: String): Unit = {
+    try {
+      val query = s"UPDATE $keyspace.$tableName SET matchId = '$matchId' WHERE userId = '$user';"
+      cqlSession.execute(query)
+      info(s"Successfully updated matchId for user $user in Database")
+    } catch {
+      case ex: Exception =>
+        error(s"Failed to update matchId for user $user in Database with error : ", ex)
         throw ex
     }
   }

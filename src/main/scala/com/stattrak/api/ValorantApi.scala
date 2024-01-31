@@ -5,7 +5,7 @@ import com.stattrak.api.dto.{MatchResponse, PatchResponse, RankResponse}
 import com.stattrak.models.User
 import com.stattrak.utils.Logging
 import io.circe.generic.auto.*
-import io.circe.{parser, *}
+import io.circe.*
 import io.circe.parser.*
 
 import scala.io.Source
@@ -74,13 +74,9 @@ object ValorantApi extends Logging {
   }
 
   private def parseJson[T: Decoder](jsonString: String): T = {
-    parser.parse(jsonString) match {
-      case Left(error) => throw new IllegalArgumentException(s"Invalid JSON object: ${error.message}")
-      case Right(json) => json.as[T] match {
-        case Left(decodingError) => 
-          throw new IllegalArgumentException(s"Failed to decode JSON: ${decodingError.message}")
-        case Right(result) => result
-      }
+    decode[T](jsonString) match {
+      case Left(error) => throw new IllegalArgumentException("Invalid json response")
+      case Right(result) => result
     }
   }
 
