@@ -2,20 +2,27 @@ package com.stattrak.updaters
 
 import com.stattrak.api.ValorantApi
 import com.stattrak.api.dto.{MatchDto, MatchResponse}
+import com.stattrak.clients.DiscordClient
 import com.stattrak.models.{User, Userdata}
 import com.stattrak.store.UserStore
-import com.stattrak.utils.Logging
+import com.stattrak.utils.{DiscordMsgGenerator, Logging}
 
 class MatchUpdater extends Updater with Logging {
   def checkForUpdate(): Unit = {
     UserStore.cache.forEach((user, userdata) => {
-      val recentMatchData = getRecentMatch(user)
-      // TODO : Handle the case where user or tag is changed
-      if (recentMatchData.matchid != userdata.matchId) {
-        val newUserdata = Userdata(userdata.channelId, recentMatchData.matchid, userdata.rank)
-        info(s"Latest match update for $user, match data : $recentMatchData")
-        // TODO : Notify user using Discord Client
-        UserStore.updateMatchId(user, newUserdata)
+      try {
+        val recentMatchData = getRecentMatch(user)
+        if (recentMatchData.matchid != userdata.matchId) {
+          val newUserdata = Userdata(userdata.channelId, recentMatchData.matchid, userdata.rank)
+          info(s"Latest match update for $user, match data : $recentMatchData")
+          updateUser(user, userdata, recentMatchData)
+          UserStore.updateMatchId(user, newUserdata)
+        }
+      } catch {
+        case ex: Exception => 
+          error(s"Removing user $user from database as the user is no longer valid", ex)
+          UserStore.remove(user)
+          DiscordClient.handleUserExpired(userdata.channelId, user)
       }
     })
   }
@@ -31,6 +38,11 @@ class MatchUpdater extends Updater with Logging {
     }
   }
 
+  private def updateUser(user: User, userdata: Userdata, matchDto: MatchDto): Unit = {
+    val msg = DiscordMsgGenerator.getMatchUpdateMsg(userdata.channelId, user, matchDto)
+    DiscordClient.sendMessage(msg)
+  }
+  
   private def toMatchDTO(response: MatchResponse): MatchDto = {
     val meta = response.data(0).meta
     val stats = response.data(0).stats
