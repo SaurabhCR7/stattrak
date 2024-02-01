@@ -37,4 +37,9 @@ object UserStore extends Logging {
     ScyllaDbClient.updateMatchId(user, userdata.matchId)
     cache.put(user, userdata)
   }
+  
+  def updateRank(user: User, userdata: Userdata): Unit = {
+    ScyllaDbClient.updateRank(user, userdata.rank)
+    cache.put(user, userdata)
+  }
 }

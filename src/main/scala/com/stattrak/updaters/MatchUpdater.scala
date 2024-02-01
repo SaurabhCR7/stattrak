@@ -14,7 +14,7 @@ class MatchUpdater extends Updater with Logging {
         val recentMatchData = getRecentMatch(user)
         if (recentMatchData.matchid != userdata.matchId) {
           val newUserdata = Userdata(userdata.channelId, recentMatchData.matchid, userdata.rank)
-          info(s"Latest match update for $user, match data : $recentMatchData")
+          info(s"Match update for $user, match data : $recentMatchData")
           updateUser(user, userdata, recentMatchData)
           UserStore.updateMatchId(user, newUserdata)
         }

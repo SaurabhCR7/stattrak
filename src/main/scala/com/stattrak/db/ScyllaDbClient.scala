@@ -78,6 +78,18 @@ object ScyllaDbClient extends Logging {
     }
   }
 
+  def updateRank(user: User, rank: String): Unit = {
+    try {
+      val query = s"UPDATE $keyspace.$tableName SET rank = '$rank' WHERE userId = '$user';"
+      cqlSession.execute(query)
+      info(s"Successfully updated rank for user $user in Database")
+    } catch {
+      case ex: Exception =>
+        error(s"Failed to update rank for user $user in Database with error : ", ex)
+        throw ex
+    }
+  }
+
 
   // Utils :
   private def extractUserData(row: Row): Userdata = {

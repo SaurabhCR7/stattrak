@@ -1,7 +1,7 @@
 package com.stattrak
 package utils
 
-import com.stattrak.api.dto.MatchDto
+import com.stattrak.api.dto.{MatchDto, RankDto}
 import com.stattrak.models.{DiscordEmbedMessage, User}
 import net.dv8tion.jda.api.EmbedBuilder
 
@@ -70,10 +70,26 @@ object DiscordMsgGenerator {
     }
     val messageEmbed = new EmbedBuilder().setColor(color)
       .setTitle(matchDto.map)
-      .setAuthor(user.toString)
+      .setAuthor(s"$user (${matchDto.result})")
       .setDescription(formatMatchMsg(matchDto))
       .setThumbnail(valorantThumbnail)
       .setImage(getMapThumbnail(matchDto.map))
+      .build
+    DiscordEmbedMessage(channelId, messageEmbed)
+  }
+
+  def getRankUpdateMsg(channelId: Long, user: User, rankDto: RankDto): DiscordEmbedMessage = {
+    val color = if (rankDto.mmrChange >= 0) {
+      Color.cyan
+    } else {
+      Color.red
+    }
+    val messageEmbed = new EmbedBuilder().setColor(color)
+      .setTitle(rankDto.rank)
+      .setAuthor(user.toString)
+      .setDescription(formatRankMsg(rankDto))
+      .setThumbnail(valorantThumbnail)
+      .setImage(rankDto.imageUrl)
       .build
     DiscordEmbedMessage(channelId, messageEmbed)
   }
@@ -87,6 +103,19 @@ object DiscordMsgGenerator {
       s"**K** : `${matchDto.kills}`  |  **D** : `${matchDto.deaths}`  |  **A** : `${matchDto.assists}` \n " +
       s"**HS%** : `${matchDto.headshotPct}` \n " +
       s"**ADR** : `${matchDto.avgDamagePerRound}` \n"
+  }
+
+  private def formatRankMsg(rankDto: RankDto) = {
+    val rankUpMsg = s"*Congratulations on your rank up! \n You've been grinding hard, and it's paying off. \n " +
+      s"Keep up the good work!*"
+    val derankMsg = s"*Hey, I saw you deranked. \n It's okay, everyone has bad days. \n " +
+      s"Just keep your head up and keep practicing, \n and you'll be back to your old rank in no time.*"
+    val greetingMsg = if (rankDto.mmrChange < 0) {
+      derankMsg
+    } else {
+      rankUpMsg
+    }
+    s"$greetingMsg \n\n **Elo** : `${rankDto.elo}`\n"
   }
 
   private def getMapThumbnail(map: String) = {
