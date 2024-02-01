@@ -63,7 +63,7 @@ object DiscordClient extends ListenerAdapter with Logging {
     }
   }
 
-  private def sendMessage(msg: DiscordEmbedMessage): Unit = {
+  def sendMessage(msg: DiscordEmbedMessage): Unit = {
     val channel = jda.getChannelById(classOf[MessageChannel], msg.channelId)
     channel.sendMessageEmbeds(msg.messageEmbed).queue()
   }
@@ -95,6 +95,11 @@ object DiscordClient extends ListenerAdapter with Logging {
   private def handleUserSubscribed(channelId: Long, user: User): Unit = {
     info(s"User is successfully subscribed  : $user")
     val msg = DiscordMsgGenerator.getUserSubscribedMsg(channelId, user.toString)
+    sendMessage(msg)
+  }
+  
+  def handleUserExpired(channelId: Long, user: User): Unit = {
+    val msg = DiscordMsgGenerator.getUserExpiredMsg(channelId, user)
     sendMessage(msg)
   }
 

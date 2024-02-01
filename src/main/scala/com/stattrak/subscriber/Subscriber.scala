@@ -2,7 +2,7 @@ package com.stattrak
 package subscriber
 
 import api.ValorantApi.isUserValid
-import cache.Cache
+import store.UserStore
 import models.{User, Userdata}
 import utils.Logging
 
@@ -11,11 +11,11 @@ class Subscriber extends Logging {
   def subscribe(user: User, userdata: Userdata): SubscriberStatus.Value = {
     if (!isUserValid(user)) {
       SubscriberStatus.invalid
-    } else if (Cache.isPresent(user)) {
+    } else if (UserStore.isPresent(user)) {
       SubscriberStatus.alreadyExists
     } else {
       try {
-        Cache.add(user, userdata)
+        UserStore.add(user, userdata)
         SubscriberStatus.successful
       } catch {
         case ex: Exception =>
@@ -26,7 +26,7 @@ class Subscriber extends Logging {
   }
 
   def unsubscribe(user: User): Unit = {
-    Cache.remove(user)
+    UserStore.remove(user)
     info(s"User $user unsubscribed Successfully")
   }
 }

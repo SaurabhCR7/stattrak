@@ -9,7 +9,7 @@ case class ImageUrls(small: String, large: String, triangle_down: String, triang
 
 case class Map(name: String, id: String)
 
-case class Season(id: String, _short: String)
+case class Season(id: String, short: String)
 
 case class Shots(head: Int, body: Int, leg: Int)
 
