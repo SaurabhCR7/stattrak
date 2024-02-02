@@ -28,7 +28,7 @@ class RankUpdater extends Updater with Logging {
   }
   
   private def getRecentRank(user: User): RankDto = {
-    val response = ValorantApi.fetchRank(user)
+    val response = ValorantApi.fetchRankData(user)
     try {
       toRankDTO(response)
     } catch {

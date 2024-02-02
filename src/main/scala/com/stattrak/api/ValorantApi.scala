@@ -14,7 +14,7 @@ object ValorantApi extends Logging {
   // This is to avoid exceeding api rate limits
   private val delayInMs = 200
 
-  def fetchLastMatch(user: User): MatchResponse = {
+  def fetchMatchData(user: User): MatchResponse = {
     try {
       val url = getCompetitiveApiUrl(user)
       Thread.sleep(delayInMs)
@@ -30,18 +30,20 @@ object ValorantApi extends Logging {
     }
   }
 
-  def fetchRank(user: User): RankResponse = try {
-    val url = getRankApiUrl(user)
-    Thread.sleep(delayInMs)
-    val source = Source.fromURL(url)
-    val jsonString = source.mkString
-    val response = parseJson[RankResponse](jsonString)
-    source.close()
-    response
-  } catch {
-    case e: Exception =>
-      error("Failed to fetch rank data from api with error : ", e)
-      null
+  def fetchRankData(user: User): RankResponse = {
+    try {
+      val url = getRankApiUrl(user)
+      Thread.sleep(delayInMs)
+      val source = Source.fromURL(url)
+      val jsonString = source.mkString
+      val response = parseJson[RankResponse](jsonString)
+      source.close()
+      response
+    } catch {
+      case e: Exception =>
+        error("Failed to fetch rank data from api with error : ", e)
+        null
+    }
   }
 
   def isUserValid(user: User): Boolean = {
@@ -59,18 +61,42 @@ object ValorantApi extends Logging {
     }
   }
 
-  def fetchPatch: PatchResponse = try {
-    val url = getPatchApiUrl
-    Thread.sleep(delayInMs)
-    val source = Source.fromURL(url)
-    val jsonString = source.mkString
-    val response = parseJson[PatchResponse](jsonString)
-    source.close()
-    response
-  } catch {
-    case e: Exception =>
-      error("Failed to fetch patch notes from api with error : ", e)
-      null
+  def fetchPatchData: PatchResponse = {
+    try {
+      val url = getPatchApiUrl
+      Thread.sleep(delayInMs)
+      val source = Source.fromURL(url)
+      val jsonString = source.mkString
+      val response = parseJson[PatchResponse](jsonString)
+      source.close()
+      response
+    } catch {
+      case e: Exception =>
+        error("Failed to fetch patch notes from api with error : ", e)
+        null
+    }
+  }
+  
+  def getLatestRank(user: User): String = {
+    try {
+      val response = fetchRankData(user)
+      response.data.currenttierpatched
+    } catch {
+      case ex: Exception => 
+        error(s"Failed to fetch the latest rank for user $user")
+        "Empty"
+    }
+  }
+
+  def getLatestMatchId(user: User): String = {
+    try {
+      val response = fetchMatchData(user)
+      response.data(0).meta.id
+    } catch {
+      case ex: Exception =>
+        error(s"Failed to fetch the latest matchid for user $user")
+        "Empty"
+    }
   }
 
   private def parseJson[T: Decoder](jsonString: String): T = {

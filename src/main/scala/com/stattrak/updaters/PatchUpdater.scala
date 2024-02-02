@@ -28,7 +28,7 @@ class PatchUpdater extends Updater with Logging {
   }
 
   private def getRecentPatch: PatchDto = {
-    val response = ValorantApi.fetchPatch
+    val response = ValorantApi.fetchPatchData
     try {
       toPatchDTO(response)
     } catch {
@@ -45,7 +45,6 @@ class PatchUpdater extends Updater with Logging {
     val title = data.title
     val url = data.url
     val category = data.category
-    info(s"Successfully fetched patch notes $response")
     PatchDto(bannerUrl, date, title, url, category)
   }
 
