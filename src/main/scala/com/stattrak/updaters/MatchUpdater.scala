@@ -15,7 +15,7 @@ class MatchUpdater extends Updater with Logging {
         if (recentMatchData.matchid != userdata.matchId) {
           val newUserdata = Userdata(userdata.channelId, recentMatchData.matchid, userdata.rank)
           info(s"Match update for $user, match data : $recentMatchData")
-          updateUser(user, userdata, recentMatchData)
+          notifyUser(user, userdata, recentMatchData)
           UserStore.updateMatchId(user, newUserdata)
         }
       } catch {
@@ -38,7 +38,7 @@ class MatchUpdater extends Updater with Logging {
     }
   }
 
-  private def updateUser(user: User, userdata: Userdata, matchDto: MatchDto): Unit = {
+  private def notifyUser(user: User, userdata: Userdata, matchDto: MatchDto): Unit = {
     val msg = DiscordMsgGenerator.getMatchUpdateMsg(userdata.channelId, user, matchDto)
     DiscordClient.sendMessage(msg)
   }

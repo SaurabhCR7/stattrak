@@ -12,7 +12,7 @@ object Scheduler {
   private val initialDelay = 0 // 1 min
   private val matchUpdaterInterval = 1 // 1 min
   private val rankUpdaterInterval = 1 // 1 mins
-  private val patchUpdaterInterval = 30 // 30 mins
+  private val patchUpdaterInterval = 1 // 30 mins
   
   private val matchUpdater = new MatchUpdater
   private val rankUpdater = new RankUpdater
