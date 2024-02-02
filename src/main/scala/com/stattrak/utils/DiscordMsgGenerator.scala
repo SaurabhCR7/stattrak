@@ -1,9 +1,10 @@
 package com.stattrak
 package utils
 
-import com.stattrak.api.dto.{MatchDto, RankDto}
+import com.stattrak.api.dto.{MatchDto, PatchDto, RankDto}
 import com.stattrak.models.{DiscordEmbedMessage, User}
 import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.entities.MessageEmbed
 
 import java.awt.Color
 
@@ -69,8 +70,8 @@ object DiscordMsgGenerator {
       Color.red
     }
     val messageEmbed = new EmbedBuilder().setColor(color)
-      .setTitle(matchDto.map)
-      .setAuthor(s"$user (${matchDto.result})")
+      .setTitle(s"${matchDto.map} (${matchDto.result})")
+      .setAuthor(user.toString)
       .setDescription(formatMatchMsg(matchDto))
       .setThumbnail(valorantThumbnail)
       .setImage(getMapThumbnail(matchDto.map))
@@ -93,6 +94,18 @@ object DiscordMsgGenerator {
       .build
     DiscordEmbedMessage(channelId, messageEmbed)
   }
+
+  def getPatchMsg(channelId: Long, patchData: PatchDto): DiscordEmbedMessage = {
+    val messageEmbed = new EmbedBuilder()
+      .setAuthor(patchData.title)
+      .setColor(Color.white)
+      .setDescription(patchData.url)
+      .setThumbnail(valorantThumbnail)
+      .setImage(patchData.banner_url)
+      .build
+    DiscordEmbedMessage(channelId, messageEmbed)
+  }
+
 
   private def formatQuotedMsg(msg: String) = "> " + msg
 

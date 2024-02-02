@@ -15,7 +15,7 @@ class RankUpdater extends Updater with Logging {
         if (recentRankData.rank != userdata.rank) {
           val newUserdata = Userdata(userdata.channelId, userdata.matchId, recentRankData.rank)
           info(s"Rank update for $user, rank data : $recentRankData")
-          updateRank(user, userdata, recentRankData)
+          notifyUser(user, userdata, recentRankData)
           UserStore.updateRank(user, newUserdata)
         }
       } catch {
@@ -38,7 +38,7 @@ class RankUpdater extends Updater with Logging {
     }
   }
   
-  private def updateRank(user: User, userdata: Userdata, rankDto: RankDto): Unit = {
+  private def notifyUser(user: User, userdata: Userdata, rankDto: RankDto): Unit = {
     val msg = DiscordMsgGenerator.getRankUpdateMsg(userdata.channelId, user, rankDto)
     DiscordClient.sendMessage(msg)
   }

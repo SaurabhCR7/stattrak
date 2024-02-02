@@ -1,7 +1,9 @@
 package com.stattrak
 package api.dto
 
-case class PatchDto(banner_url: String, date: String, title: String, url: String, category: String)
+import java.time.LocalDateTime
+
+case class PatchDto(banner_url: String, date: LocalDateTime, title: String, url: String, category: String)
 
 case class PatchResponse(status: Int, data: Array[PatchData])
 
