@@ -54,6 +54,15 @@ object DiscordMsgGenerator {
     DiscordEmbedMessage(channelId, messageEmbed)
   }
 
+  def getUserUnsubscribedMsg(channelId: Long, msg: String): DiscordEmbedMessage = {
+    val messageEmbed = new EmbedBuilder().setColor(Color.red)
+      .setTitle("User is successfully unsubscribed !!")
+      .setDescription(formatQuotedMsg(msg))
+      .setThumbnail(valorantThumbnail)
+      .build
+    DiscordEmbedMessage(channelId, messageEmbed)
+  }
+
   def getUserExpiredMsg(channelId: Long, user: User): DiscordEmbedMessage = {
     val messageEmbed = new EmbedBuilder().setColor(Color.red)
       .setTitle(s"User $user has expired !!")

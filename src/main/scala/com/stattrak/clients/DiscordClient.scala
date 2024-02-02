@@ -58,7 +58,10 @@ object DiscordClient extends ListenerAdapter with Logging {
           case SubscriberStatus.successful => handleUserSubscribed(channelId, user)
         }
       }
-      case CommandType.unsubscribe => subscriber.unsubscribe(user)
+      case CommandType.unsubscribe => {
+        subscriber.unsubscribe(user)
+        handleUserUnsubscribed(channelId, user)
+      }
       case CommandType.invalid => handleInvalidCommand(channelId, message)
     }
   }
@@ -95,6 +98,12 @@ object DiscordClient extends ListenerAdapter with Logging {
   private def handleUserSubscribed(channelId: Long, user: User): Unit = {
     info(s"User is successfully subscribed  : $user")
     val msg = DiscordMsgGenerator.getUserSubscribedMsg(channelId, user.toString)
+    sendMessage(msg)
+  }
+
+  private def handleUserUnsubscribed(channelId: Long, user: User): Unit = {
+    info(s"User is successfully unsubscribed  : $user")
+    val msg = DiscordMsgGenerator.getUserUnsubscribedMsg(channelId, user.toString)
     sendMessage(msg)
   }
   
