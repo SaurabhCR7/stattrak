@@ -28,7 +28,7 @@ class MatchUpdater extends Updater with Logging {
   }
 
   private def getRecentMatch(user: User): MatchDto = {
-    val response = ValorantApi.fetchLastMatch(user)
+    val response = ValorantApi.fetchMatchData(user)
     try {
       toMatchDTO(response)
     } catch {

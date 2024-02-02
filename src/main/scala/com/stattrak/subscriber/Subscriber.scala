@@ -1,7 +1,7 @@
 package com.stattrak
 package subscriber
 
-import api.ValorantApi.isUserValid
+import api.ValorantApi.{getLatestMatchId, getLatestRank, isUserValid}
 import store.UserStore
 import models.{User, Userdata}
 import utils.Logging
@@ -15,7 +15,10 @@ class Subscriber extends Logging {
       SubscriberStatus.alreadyExists
     } else {
       try {
-        UserStore.add(user, userdata)
+        val matchId = getLatestMatchId(user)
+        val rank = getLatestRank(user)
+        val newUserData = Userdata(userdata.channelId, matchId, rank)
+        UserStore.add(user, newUserData)
         SubscriberStatus.successful
       } catch {
         case ex: Exception =>

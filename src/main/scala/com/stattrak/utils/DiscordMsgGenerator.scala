@@ -142,6 +142,7 @@ object DiscordMsgGenerator {
       case "Fracture" => fractureImg
       case "Pearl" => pearlImg
       case "Lotus" => lotusImg
+      case "Sunset" => sunsetImg
       case _ => defaultMapImg
     }
   }
@@ -158,5 +159,6 @@ object DiscordMsgGenerator {
   private val fractureImg = "https://static.wikia.nocookie.net/valorant/images/f/fc/Loading_Screen_Fracture.png/revision/latest"
   private val pearlImg = "https://static.wikia.nocookie.net/valorant/images/a/af/Loading_Screen_Pearl.png/revision/latest"
   private val lotusImg = "https://static.wikia.nocookie.net/valorant/images/d/d0/Loading_Screen_Lotus.png/revision/latest"
+  private val sunsetImg = "https://static.wikia.nocookie.net/valorant/images/5/5c/Loading_Screen_Sunset.png/revision/latest"
   private val defaultMapImg = "https://images2.alphacoders.com/132/1322753.jpeg"
 }
