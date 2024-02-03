@@ -1,10 +1,10 @@
 package com.stattrak
 package utils
 
-import com.typesafe.scalalogging.Logger
+import org.slf4j.LoggerFactory
 
 trait Logging {
-  private val logger = Logger(getClass.getName)
+  private val logger = LoggerFactory.getLogger(getClass.getName)
 
   def info(msg: String): Unit = logger.info(msg)
 
