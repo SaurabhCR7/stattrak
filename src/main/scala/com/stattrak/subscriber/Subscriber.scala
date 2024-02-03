@@ -15,9 +15,7 @@ class Subscriber extends Logging {
       SubscriberStatus.alreadyExists
     } else {
       try {
-        val matchId = getLatestMatchId(user)
-        val rank = getLatestRank(user)
-        val newUserData = Userdata(userdata.channelId, matchId, rank)
+        val newUserData = Userdata(userdata.channelId, "Empty", "Empty")
         UserStore.add(user, newUserData)
         SubscriberStatus.successful
       } catch {

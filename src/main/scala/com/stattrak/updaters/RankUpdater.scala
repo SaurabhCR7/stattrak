@@ -15,7 +15,9 @@ class RankUpdater extends Updater with Logging {
         if (recentRankData.rank != userdata.rank) {
           val newUserdata = Userdata(userdata.channelId, userdata.matchId, recentRankData.rank)
           info(s"Rank update for $user, rank data : $recentRankData")
-          notifyUser(user, userdata, recentRankData)
+          if (userdata.rank != "Empty") {
+            notifyUser(user, userdata, recentRankData)
+          }
           UserStore.updateRank(user, newUserdata)
         }
       } catch {
