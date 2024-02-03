@@ -1,6 +1,6 @@
 package com.stattrak.scheduler
 
-import com.stattrak.updaters.{MatchUpdater, PatchUpdater, RankUpdater, Updater}
+import com.stattrak.updaters.{MatchUpdater, PatchUpdater, RankUpdater}
 
 import java.util.concurrent.{ScheduledThreadPoolExecutor, TimeUnit}
 

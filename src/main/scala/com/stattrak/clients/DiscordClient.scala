@@ -1,10 +1,9 @@
 package com.stattrak
 package clients
 
-import models.{DiscordEmbedMessage, User, Userdata}
-import subscriber.{CommandHandler, CommandType, Subscriber, SubscriberStatus}
-import utils.{DiscordMsgGenerator, Logging}
-
+import com.stattrak.models.{DiscordEmbedMessage, User, Userdata}
+import com.stattrak.subscriber.{CommandHandler, CommandType, Subscriber, SubscriberStatus}
+import com.stattrak.utils.{DiscordMsgGenerator, Logging}
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter

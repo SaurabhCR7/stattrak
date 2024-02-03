@@ -1,9 +1,9 @@
 package com.stattrak
 
-import store.UserStore
-import clients.DiscordClient
+import com.stattrak.clients.DiscordClient
+import com.stattrak.db.ScyllaDbClient
 import com.stattrak.scheduler.Scheduler
-import db.ScyllaDbClient
+import com.stattrak.store.UserStore
 
 object Main {
   def main(args: Array[String]): Unit = {

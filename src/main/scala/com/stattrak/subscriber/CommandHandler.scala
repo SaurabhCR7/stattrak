@@ -1,8 +1,8 @@
 package com.stattrak
 package subscriber
 
-import models.User
-import utils.Logging
+import com.stattrak.models.User
+import com.stattrak.utils.Logging
 
 object CommandHandler extends Logging {
 

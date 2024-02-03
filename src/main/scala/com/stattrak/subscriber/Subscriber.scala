@@ -1,10 +1,10 @@
 package com.stattrak
 package subscriber
 
-import api.ValorantApi.{getLatestMatchId, getLatestRank, isUserValid}
-import store.UserStore
-import models.{User, Userdata}
-import utils.Logging
+import com.stattrak.api.ValorantApi.isUserValid
+import com.stattrak.models.{User, Userdata}
+import com.stattrak.store.UserStore
+import com.stattrak.utils.Logging
 
 class Subscriber extends Logging {
 

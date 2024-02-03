@@ -4,8 +4,8 @@ package api
 import com.stattrak.api.dto.{MatchResponse, PatchResponse, RankResponse}
 import com.stattrak.models.User
 import com.stattrak.utils.Logging
-import io.circe.generic.auto.*
 import io.circe.*
+import io.circe.generic.auto.*
 import io.circe.parser.*
 
 import scala.io.Source

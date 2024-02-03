@@ -1,9 +1,9 @@
 package com.stattrak
 package store
 
-import db.ScyllaDbClient
-import models.{User, Userdata}
-import utils.Logging
+import com.stattrak.db.ScyllaDbClient
+import com.stattrak.models.{User, Userdata}
+import com.stattrak.utils.Logging
 
 import java.util.concurrent.ConcurrentHashMap
 
