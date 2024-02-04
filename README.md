@@ -8,6 +8,10 @@ Stattrak is a Discord bot written in Scala that keeps you up-to-date with your V
 * **Match updates:** Never miss a match update again! Receive notifications for match wins, losses, and key performance stats.
 * **Patch notes:** Stay informed about the latest Valorant updates with patch note notifications delivered directly to your Discord server.
 
+**Invite the discord:**
+```bash
+https://discord.com/api/oauth2/authorize?client_id=876016856555728906&permissions=1084479764544&scope=bot
+```
 
 **Technology Stack:**
 
