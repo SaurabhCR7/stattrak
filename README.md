@@ -19,22 +19,20 @@ Stattrak is a Discord bot written in Scala that keeps you up-to-date with your V
 ## Getting Started:
 
 1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/SaurabhCR7/stattrak.git
-   ```
+    ```bash
+    git clone https://github.com/SaurabhCR7/stattrak.git
+    ```
 
 2. **Download required libraries:**
-
-   ```bash
-   sbt update
-   ```
+    ```bash
+    sbt update
+    ```
 
 3. **Configure the bot:**
-```bash
-Create a token.env in the root directory of the project.
-Add the discord bot token in this file.
-```
+    ```bash
+    Create a token.env in the root directory of the project.
+    Add the discord bot token in this file.
+    ```
 
 4. **Start ScyllaDB container in docker:**
     ```bash
@@ -47,11 +45,11 @@ Add the discord bot token in this file.
     ```
 
 6. **Add the bot to your Discord server:**
-```bash
-Create a bot application in the Discord Developer Portal and copy its url.
-Use the url to invite the bot to your server.
-Follow the bot's instructions to link your Valorant account and start receiving notifications!
-```
+    ```bash
+    Create a bot application in the Discord Developer Portal and copy its url.
+    Use the url to invite the bot to your server.
+    Follow the bot's instructions to link your Valorant account and start receiving notifications!
+    ```
 
 ## Commands:
 1. **Subscribe:**
