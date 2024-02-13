@@ -59,11 +59,13 @@ Stattrak is a Discord bot written in Scala that keeps you up-to-date with your V
 ``` bash
 >subscribe username#tag
 ```
+![ScreenRecording2024-02-13at9 28 05PM-ezgif com-video-to-gif-converter](https://github.com/SaurabhCR7/stattrak/assets/19225940/bc9fb906-e7c3-4c78-b57b-ed65b3972058)
 
 2. **Unsubscribe:**
 ``` bash
 >unsubscribe username#tag
 ```
+![ScreenRecording2024-02-13at9 33 05PM-ezgif com-video-to-gif-converter](https://github.com/SaurabhCR7/stattrak/assets/19225940/3f3c7e3b-5ad7-4b70-b220-825aa4035d1e)
 
 ## Contributing:
 
