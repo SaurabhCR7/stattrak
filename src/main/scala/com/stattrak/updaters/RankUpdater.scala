@@ -21,10 +21,7 @@ class RankUpdater extends Updater with Logging {
           UserStore.updateRank(user, newUserdata)
         }
       } catch {
-        case ex: Exception =>
-          error(s"Removing user $user from database as the user is no longer valid", ex)
-          UserStore.remove(user)
-          DiscordClient.handleUserExpired(userdata.channelId, user)
+        case ex: Exception => error(s"Failed to fetch rank data for user $user", ex)
       }
     })
   }

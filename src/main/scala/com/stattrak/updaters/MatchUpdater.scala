@@ -21,10 +21,7 @@ class MatchUpdater extends Updater with Logging {
           UserStore.updateMatchId(user, newUserdata)
         }
       } catch {
-        case ex: Exception => 
-          error(s"Removing user $user from database as the user is no longer valid", ex)
-          UserStore.remove(user)
-          DiscordClient.handleUserExpired(userdata.channelId, user)
+        case ex: Exception => error(s"Failed to fetch latest match data for user $user", ex)
       }
     })
   }
