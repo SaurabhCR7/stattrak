@@ -13,7 +13,7 @@ import scala.collection.mutable
 import scala.io.Source
 
 class PatchUpdater extends Updater with Logging {
-  private val patchStoreFilepath = "src/main/scala/com/stattrak/updaters/patchNotes.txt"
+  private val patchStoreFilepath = "patchNotes.txt"
   private var currentPatchTitle = readPatchTitleFromDisk
   private val path = Paths.get(patchStoreFilepath)
 
