@@ -4,7 +4,6 @@ package utils
 import com.stattrak.api.dto.{MatchDto, PatchDto, RankDto}
 import com.stattrak.models.{DiscordEmbedMessage, User}
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.entities.MessageEmbed
 
 import java.awt.Color
 
@@ -73,10 +72,11 @@ object DiscordMsgGenerator {
   }
 
   def getMatchUpdateMsg(channelId: Long, user: User, matchDto: MatchDto): DiscordEmbedMessage = {
-    val color = if (matchDto.result == "Won") {
-      Color.cyan
-    } else {
-      Color.red
+    val color = matchDto.result match {
+      case "Won" => Color.cyan
+      case "Lost" => Color.red
+      case "Draw" => Color.white
+      case _ => Color.white
     }
     val messageEmbed = new EmbedBuilder().setColor(color)
       .setTitle(s"${matchDto.map} (${matchDto.result})")
