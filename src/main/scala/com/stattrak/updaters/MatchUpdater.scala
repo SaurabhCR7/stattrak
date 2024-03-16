@@ -52,11 +52,12 @@ class MatchUpdater extends Updater with Logging {
     val matchid = meta.id
     val map = meta.map.name
     val team = stats.team
-
-    val result = getResult(team, redTeamScore, blueTeamScore)
+    
     val server = meta.cluster
     val myTeamScore = getMyTeamScore(team, redTeamScore, blueTeamScore)
     val enemyTeamScore = getEnemyTeamScore(team, redTeamScore, blueTeamScore)
+    val result = getResult(myTeamScore, enemyTeamScore)
+    
     val level = stats.level
     val agent = stats.character.name
     val kills = stats.kills
@@ -69,10 +70,14 @@ class MatchUpdater extends Updater with Logging {
       level, agent, kills, deaths, assists, headshotPct, avgDamagePerRound)
   }
 
-  private def getResult(team: String, redTeamScore: Int, blueTeamScore: Int): String = {
-    if (team == "Red" && redTeamScore > blueTeamScore) return "Won"
-    if (team == "Blue" && blueTeamScore > redTeamScore) return "Won"
-    "Lost"
+  private def getResult(myTeamScore: Int, enemyTeamScore: Int): String = {
+    if (myTeamScore > enemyTeamScore) {
+      "Won"
+    } else if (myTeamScore < enemyTeamScore) {
+      "Lost"
+    } else {
+      "Draw"
+    }
   }
 
   private def getMyTeamScore(team: String, redTeamScore: Int, blueTeamScore: Int) = {
