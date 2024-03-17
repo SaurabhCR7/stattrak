@@ -3,6 +3,7 @@ package utils
 
 import com.stattrak.api.dto.{MatchDto, PatchDto, RankDto}
 import com.stattrak.models.{DiscordEmbedMessage, User}
+import com.stattrak.utils.Assets.*
 import net.dv8tion.jda.api.EmbedBuilder
 
 import java.awt.Color
@@ -82,7 +83,7 @@ object DiscordMsgGenerator {
       .setTitle(s"${matchDto.map} (${matchDto.result})")
       .setAuthor(user.toString)
       .setDescription(formatMatchMsg(matchDto))
-      .setThumbnail(valorantThumbnail)
+      .setThumbnail(getAgentImg(matchDto.agent))
       .setImage(getMapThumbnail(matchDto.map))
       .build
     DiscordEmbedMessage(channelId, messageEmbed)
@@ -98,8 +99,7 @@ object DiscordMsgGenerator {
       .setTitle(rankDto.rank)
       .setAuthor(user.toString)
       .setDescription(formatRankMsg(rankDto))
-      .setThumbnail(valorantThumbnail)
-      .setImage(rankDto.imageUrl)
+      .setThumbnail(rankDto.imageUrl)
       .build
     DiscordEmbedMessage(channelId, messageEmbed)
   }
@@ -139,35 +139,4 @@ object DiscordMsgGenerator {
     }
     s"$greetingMsg \n\n **Elo** : `${rankDto.elo}`\n"
   }
-
-  private def getMapThumbnail(map: String) = {
-    map match {
-      case "Bind" => bindImg
-      case "Split" => splitImg
-      case "Ascent" => ascentImg
-      case "Icebox" => iceboxImg
-      case "Haven" => havenImg
-      case "Breeze" => breezeImg
-      case "Fracture" => fractureImg
-      case "Pearl" => pearlImg
-      case "Lotus" => lotusImg
-      case "Sunset" => sunsetImg
-      case _ => defaultMapImg
-    }
-  }
-  
-  // Images
-  private val valorantThumbnail = "https://c.tenor.com/wuYSt-pgcoEAAAAM/valorant-games.gif"
-
-  private val bindImg = "https://static.wikia.nocookie.net/valorant/images/2/23/Loading_Screen_Bind.png/revision/latest"
-  private val splitImg = "https://static.wikia.nocookie.net/valorant/images/d/d6/Loading_Screen_Split.png/revision/latest"
-  private val ascentImg = "https://static.wikia.nocookie.net/valorant/images/e/e7/Loading_Screen_Ascent.png/revision/latest"
-  private val iceboxImg = "https://static.wikia.nocookie.net/valorant/images/1/13/Loading_Screen_Icebox.png/revision/latest"
-  private val havenImg = "https://static.wikia.nocookie.net/valorant/images/7/70/Loading_Screen_Haven.png/revision/latest"
-  private val breezeImg = "https://static.wikia.nocookie.net/valorant/images/1/10/Loading_Screen_Breeze.png/revision/latest"
-  private val fractureImg = "https://static.wikia.nocookie.net/valorant/images/f/fc/Loading_Screen_Fracture.png/revision/latest"
-  private val pearlImg = "https://static.wikia.nocookie.net/valorant/images/a/af/Loading_Screen_Pearl.png/revision/latest"
-  private val lotusImg = "https://static.wikia.nocookie.net/valorant/images/d/d0/Loading_Screen_Lotus.png/revision/latest"
-  private val sunsetImg = "https://static.wikia.nocookie.net/valorant/images/5/5c/Loading_Screen_Sunset.png/revision/latest"
-  private val defaultMapImg = "https://images2.alphacoders.com/132/1322753.jpeg"
 }
