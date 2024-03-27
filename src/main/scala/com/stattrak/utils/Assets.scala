@@ -61,7 +61,7 @@ object Assets {
   val havenImg = "https://static.wikia.nocookie.net/valorant/images/7/70/Loading_Screen_Haven.png"
   val lotusImg = "https://static.wikia.nocookie.net/valorant/images/d/d0/Loading_Screen_Lotus.png"
   val ascentImg = "https://static.wikia.nocookie.net/valorant/images/e/e7/Loading_Screen_Ascent.png"
-  val sunsetImg = "https://static.wikia.nocookie.net/valorant/images/5/5c/Loading_Screen_Suns"
+  val sunsetImg = "https://static.wikia.nocookie.net/valorant/images/5/5c/Loading_Screen_Sunset.png"
   // Agents
   val brimstone = "https://static.wikia.nocookie.net/valorant/images/4/4d/Brimstone_icon.png"
   val viper = "https://static.wikia.nocookie.net/valorant/images/5/5f/Viper_icon.png"
