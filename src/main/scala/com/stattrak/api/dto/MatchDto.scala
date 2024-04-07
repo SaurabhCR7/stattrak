@@ -3,7 +3,7 @@ package api.dto
 
 case class MatchDto(matchid: String, map: String, result: String, server: String, myTeamScore: Int,
                     enemyTeamScore: Int, level: Int, agent: String, kills: Int, deaths: Int,
-                    assists: Int, headshotPct: Int, avgDamagePerRound: Int)
+                    assists: Int, kdRatio: Float, headshotPct: Int, avgDamagePerRound: Int)
 
 case class MatchResponse(status: Int, name: String, tag: String, results: MatchResults, data: Array[MatchData])
 
