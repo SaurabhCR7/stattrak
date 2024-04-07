@@ -63,11 +63,12 @@ class MatchUpdater extends Updater with Logging {
     val kills = stats.kills
     val deaths = stats.deaths
     val assists = stats.assists
+    val kdRatio = kills / deaths.toFloat
     val headshotPct = getHeadshotPct(stats.shots.head, stats.shots.body, stats.shots.leg)
     val avgDamagePerRound = getAvgDamagePerRound(stats.damage.made, myTeamScore, enemyTeamScore)
 
     MatchDto(matchid, map, result, server, myTeamScore, enemyTeamScore,
-      level, agent, kills, deaths, assists, headshotPct, avgDamagePerRound)
+      level, agent, kills, deaths, assists, kdRatio, headshotPct, avgDamagePerRound)
   }
 
   private def getResult(myTeamScore: Int, enemyTeamScore: Int): String = {

@@ -119,10 +119,12 @@ object DiscordMsgGenerator {
   private def formatQuotedMsg(msg: String) = "> " + msg
 
   private def formatMatchMsg(matchDto: MatchDto) = {
+    val kd = f"${matchDto.kdRatio}%.2f"
     s"**Server** : `${matchDto.server}` \n " +
       s"**Agent** : `${matchDto.agent}` \n " +
       s"**Score** : `${matchDto.myTeamScore}` : `${matchDto.enemyTeamScore}` \n " +
       s"**K** : `${matchDto.kills}`  |  **D** : `${matchDto.deaths}`  |  **A** : `${matchDto.assists}` \n " +
+      s"**K/D** : `$kd` \n " +
       s"**HS%** : `${matchDto.headshotPct}` \n " +
       s"**ADR** : `${matchDto.avgDamagePerRound}` \n"
   }
