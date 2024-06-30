@@ -7,21 +7,23 @@ import com.stattrak.utils.Logging
 import io.circe.*
 import io.circe.generic.auto.*
 import io.circe.parser.*
+import requests.Response
 
 import scala.io.Source
 
 object ValorantApi extends Logging {
   // This is to avoid exceeding api rate limits
-  private val delayInMs = 200
+  private val delayInMs = 5000
+  private val source = Source.fromFile("api_key.env")
+  private val apiKey = source.getLines().next()
+  source.close()
 
   def fetchMatchData(user: User): MatchResponse = {
     try {
-      val url = getCompetitiveApiUrl(user)
       Thread.sleep(delayInMs)
-      val source = Source.fromURL(url)
-      val jsonString = source.mkString
+      val url = getCompetitiveApiUrl(user)
+      val jsonString = getRequest(url)
       val response = parseJson[MatchResponse](jsonString)
-      source.close()
       response
     } catch {
       case e: Exception =>
@@ -32,12 +34,10 @@ object ValorantApi extends Logging {
 
   def fetchRankData(user: User): RankResponse = {
     try {
-      val url = getRankApiUrl(user)
       Thread.sleep(delayInMs)
-      val source = Source.fromURL(url)
-      val jsonString = source.mkString
+      val url = getRankApiUrl(user)
+      val jsonString = getRequest(url)
       val response = parseJson[RankResponse](jsonString)
-      source.close()
       response
     } catch {
       case e: Exception =>
@@ -49,10 +49,8 @@ object ValorantApi extends Logging {
   def isUserValid(user: User): Boolean = {
     try {
       val url = getRankApiUrl(user)
-      val source = Source.fromURL(url)
-      val jsonString = source.mkString
+      val jsonString = getRequest(url)
       val response = parseJson[RankResponse](jsonString)
-      source.close()
       response.status == 200
     } catch {
       case e: Exception =>
@@ -63,12 +61,10 @@ object ValorantApi extends Logging {
 
   def fetchPatchData: PatchResponse = {
     try {
-      val url = getPatchApiUrl
       Thread.sleep(delayInMs)
-      val source = Source.fromURL(url)
-      val jsonString = source.mkString
+      val url = getPatchApiUrl
+      val jsonString = getRequest(url)
       val response = parseJson[PatchResponse](jsonString)
-      source.close()
       response
     } catch {
       case e: Exception =>
@@ -103,6 +99,15 @@ object ValorantApi extends Logging {
     decode[T](jsonString) match {
       case Left(error) => throw new IllegalArgumentException("Invalid json response")
       case Right(result) => result
+    }
+  }
+
+  private def getRequest(url: String) = {
+    val response: Response = requests.get(url, headers = Map("Authorization" -> s"$apiKey"))
+    if (response.statusCode == 200) {
+      response.text()
+    } else {
+      throw new RuntimeException(response.statusMessage)
     }
   }
 
