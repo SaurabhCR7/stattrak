@@ -1,4 +1,4 @@
-ThisBuild / version := "1.4.0"
+ThisBuild / version := "1.4.1"
 
 ThisBuild / scalaVersion := "3.3.1"
 
@@ -16,7 +16,6 @@ ThisBuild / assemblyMergeStrategy := {
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.5.6",
   "net.dv8tion" % "JDA" % "5.0.1",
-  "ch.qos.logback" % "logback-classic" % "1.5.6",
   "io.circe" %% "circe-parser" % "0.14.9",
   "io.circe" %% "circe-generic" % "0.14.7",
   "com.scylladb" % "java-driver-core" % "4.18.0.1",

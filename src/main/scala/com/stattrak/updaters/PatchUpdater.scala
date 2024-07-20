@@ -18,10 +18,12 @@ class PatchUpdater extends Updater with Logging {
   private val path = Paths.get(patchStoreFilepath)
 
   def checkForUpdate(): Unit = {
+    info("Checking for Patch Updates")
     val channels = new mutable.HashSet[Long]()
     UserStore.cache.forEach((user, userdata) => channels.add(userdata.channelId))
     val recentPatchData = getRecentPatch
     if (currentPatchTitle != recentPatchData.title) {
+      info(s"New Patch Notes found : ${recentPatchData.title}")
       channels.foreach(channel => notifyChannel(channel, recentPatchData))
       updatePatch(recentPatchData.title)
     }
@@ -79,7 +81,7 @@ class PatchUpdater extends Updater with Logging {
   }
 
   private def toLocalDateTime(date: String): LocalDateTime = {
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
     LocalDateTime.parse(date, formatter)
   }
 }

@@ -9,6 +9,7 @@ import com.stattrak.utils.{DiscordMsgGenerator, Logging}
 
 class RankUpdater extends Updater with Logging {
   def checkForUpdate(): Unit = {
+    info("Checking for Rank updates")
     UserStore.cache.forEach((user, userdata) => {
       try {
         val recentRankData = getRecentRank(user)
