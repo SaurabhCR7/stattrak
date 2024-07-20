@@ -9,6 +9,7 @@ import com.stattrak.utils.{DiscordMsgGenerator, Logging}
 
 class MatchUpdater extends Updater with Logging {
   def checkForUpdate(): Unit = {
+    info("Checking for Match Updates")
     UserStore.cache.forEach((user, userdata) => {
       try {
         val recentMatchData = getRecentMatch(user)
