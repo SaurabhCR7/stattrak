@@ -14,6 +14,7 @@ ThisBuild / assemblyMergeStrategy := {
 }
 
 libraryDependencies ++= Seq(
+  "ch.qos.logback" % "logback-classic" % "1.5.6",
   "net.dv8tion" % "JDA" % "5.0.1",
   "ch.qos.logback" % "logback-classic" % "1.5.6",
   "io.circe" %% "circe-parser" % "0.14.9",
