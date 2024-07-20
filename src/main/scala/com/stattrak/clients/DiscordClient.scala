@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.{JDA, JDABuilder}
-import net.dv8tion.jda.internal.utils.JDALogger
 
 import scala.io.Source
 
@@ -23,7 +22,6 @@ object DiscordClient extends ListenerAdapter with Logging {
 
   def apply(): Unit = {
     jda.addEventListener(this)
-    JDALogger.setFallbackLoggerEnabled(false)
     info("Discord Client Initialized")
   }
 
