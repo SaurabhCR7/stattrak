@@ -5,7 +5,7 @@ case class MatchDto(matchid: String, map: String, result: String, server: String
                     enemyTeamScore: Int, level: Int, agent: String, kills: Int, deaths: Int,
                     assists: Int, kdRatio: Float, headshotPct: Int, avgDamagePerRound: Int)
 
-case class MatchResponse(status: Int, name: String, tag: String, results: MatchResults, data: Array[MatchData])
+case class MatchResponse(status: Int, results: MatchResults, data: Array[MatchData])
 
 
 case class MatchData(meta: MatchMeta, stats: MatchStats, teams: Teams)
