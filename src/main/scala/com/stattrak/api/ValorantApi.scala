@@ -103,7 +103,7 @@ object ValorantApi extends Logging {
   }
 
   private def getRequest(url: String) = {
-    val response: Response = requests.get(url, headers = Map("Authorization" -> s"$apiKey"))
+    val response: Response = requests.get(url, auth = ("Authorization", s"$apiKey"))
     if (response.statusCode == 200) {
       response.text()
     } else {
