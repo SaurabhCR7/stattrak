@@ -13,6 +13,7 @@ object Assets {
       case "Pearl" => pearlImg
       case "Lotus" => lotusImg
       case "Sunset" => sunsetImg
+      case "Abyss" => abyssImg
       case _ => defaultMapImg
     }
   }
@@ -47,6 +48,8 @@ object Assets {
   
   // <------------------- Images ------------------->
 
+  // Source : https://valorant.fandom.com/
+
   // Common
   val valorantThumbnail = "https://c.tenor.com/wuYSt-pgcoEAAAAM/valorant-games.gif"
   val defaultMapImg = "https://images2.alphacoders.com/132/1322753.jpeg"
@@ -62,6 +65,7 @@ object Assets {
   val lotusImg = "https://static.wikia.nocookie.net/valorant/images/d/d0/Loading_Screen_Lotus.png"
   val ascentImg = "https://static.wikia.nocookie.net/valorant/images/e/e7/Loading_Screen_Ascent.png"
   val sunsetImg = "https://static.wikia.nocookie.net/valorant/images/5/5c/Loading_Screen_Sunset.png"
+  val abyssImg = "https://static.wikia.nocookie.net/valorant/images/6/61/Loading_Screen_Abyss.png"
   // Agents
   val brimstone = "https://static.wikia.nocookie.net/valorant/images/4/4d/Brimstone_icon.png"
   val viper = "https://static.wikia.nocookie.net/valorant/images/5/5f/Viper_icon.png"
