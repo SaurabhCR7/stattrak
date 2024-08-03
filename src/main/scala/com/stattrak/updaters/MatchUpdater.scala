@@ -12,14 +12,14 @@ class MatchUpdater extends Updater with Logging {
     info("Checking for Match Updates")
     UserStore.cache.forEach((user, userdata) => {
       try {
-        val recentMatchData = getRecentMatch(user)
-        if (recentMatchData.matchid != userdata.matchId) {
-          val newUserdata = Userdata(userdata.channelId, recentMatchData.matchid, userdata.rank)
-          info(s"Match update for $user, match data : $recentMatchData")
+        val newMatchData = getRecentMatch(user)
+        if (newMatchData.matchid != userdata.matchId) {
+          val newUserdata = Userdata(userdata.channelId, newMatchData.matchid, userdata.rank)
+          info(s"Match update for $user, match data : $newMatchData")
           if (userdata.matchId != "Empty") {
-            notifyUser(user, userdata, recentMatchData)
+            notifyUser(user, userdata, newMatchData)
           }
-          UserStore.updateMatchId(user, newUserdata)
+          UserStore.updateMatchId(user, newMatchData.matchid)
         }
       } catch {
         case ex: Exception => error(s"Failed to fetch latest match data for user $user", ex)

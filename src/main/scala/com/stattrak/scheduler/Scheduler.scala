@@ -5,27 +5,35 @@ import com.stattrak.updaters.{MatchUpdater, PatchUpdater, RankUpdater}
 import java.util.concurrent.{ScheduledThreadPoolExecutor, TimeUnit}
 
 object Scheduler {
-  private val threadpoolSize = 3 // Equal to the number of updaters
+  private val matchUpdater = 1
+  private val rankUpdater = 2
+  private val patchUpdater = 3
+
+  private val updaterFactory = Map(
+    matchUpdater -> new MatchUpdater, 
+    rankUpdater -> new RankUpdater, 
+    patchUpdater -> new PatchUpdater
+  )
+  
+  private val threadpoolSize = updaterFactory.size
   private val threadpool = new ScheduledThreadPoolExecutor(threadpoolSize)
 
   // Properties :
-  private val initialDelay = 1 // 1 min
-  private val matchUpdaterInterval = 1 // 1 min
-  private val rankUpdaterInterval = 1 // 1 mins
-  private val patchUpdaterInterval = 15 // 15 mins
+  private val min = 60 * 1000
+  private val initialDelay = 1 * min
+  private val matchUpdaterInterval = 1 * min
+  private val rankUpdaterInterval = 1 * min
+  private val patchUpdaterInterval = 15 * min
   
-  private val matchUpdater = new MatchUpdater
-  private val rankUpdater = new RankUpdater
-  private val patchUpdater = new PatchUpdater
-  
+
   def apply(): Unit = {
-    threadpool.scheduleAtFixedRate(() => matchUpdater.checkForUpdate(),
-      initialDelay, matchUpdaterInterval, TimeUnit.MINUTES)
+    threadpool.scheduleAtFixedRate(() => updaterFactory(matchUpdater).checkForUpdate(),
+      initialDelay, matchUpdaterInterval, TimeUnit.MILLISECONDS)
 
-    threadpool.scheduleAtFixedRate(() => rankUpdater.checkForUpdate(),
-      initialDelay, rankUpdaterInterval, TimeUnit.MINUTES)
+    threadpool.scheduleAtFixedRate(() => updaterFactory(rankUpdater).checkForUpdate(),
+      initialDelay, rankUpdaterInterval, TimeUnit.MILLISECONDS)
 
-    threadpool.scheduleAtFixedRate(() => patchUpdater.checkForUpdate(),
-      initialDelay, patchUpdaterInterval, TimeUnit.MINUTES)
+    threadpool.scheduleAtFixedRate(() => updaterFactory(patchUpdater).checkForUpdate(),
+      initialDelay, patchUpdaterInterval, TimeUnit.MILLISECONDS)
   }
 }

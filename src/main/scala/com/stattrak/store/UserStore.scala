@@ -20,26 +20,36 @@ object UserStore extends Logging {
   }
 
   def add(user: User, userdata: Userdata): Unit = {
-    ScyllaDbClient.addUser(user, userdata)
-    cache.put(user, userdata)
+    synchronized {
+      ScyllaDbClient.addUser(user, userdata)
+      cache.put(user, userdata)
+    }
   }
 
   def remove(user: User): Unit = {
-    ScyllaDbClient.removeUser(user)
-    cache.remove(user)
+    synchronized {
+      ScyllaDbClient.removeUser(user)
+      cache.remove(user)
+    }
   }
   
   def isPresent(user: User): Boolean = {
     cache.containsKey(user)
   }
   
-  def updateMatchId(user: User, userdata: Userdata): Unit = {
-    ScyllaDbClient.updateMatchId(user, userdata.matchId)
-    cache.put(user, userdata)
+  def updateMatchId(user: User, newMatchId: String): Unit = {
+    synchronized {
+      ScyllaDbClient.updateMatchId(user, newMatchId)
+      val userdata = cache.get(user).copy(matchId = newMatchId)
+      cache.put(user, userdata)
+    }
   }
   
-  def updateRank(user: User, userdata: Userdata): Unit = {
-    ScyllaDbClient.updateRank(user, userdata.rank)
-    cache.put(user, userdata)
+  def updateRank(user: User, newRank: String): Unit = {
+    synchronized {
+      ScyllaDbClient.updateRank(user, newRank)
+      val userdata = cache.get(user).copy(rank = newRank)
+      cache.put(user, userdata)
+    }
   }
 }
