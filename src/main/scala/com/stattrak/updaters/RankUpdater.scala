@@ -12,14 +12,14 @@ class RankUpdater extends Updater with Logging {
     info("Checking for Rank updates")
     UserStore.cache.forEach((user, userdata) => {
       try {
-        val recentRankData = getRecentRank(user)
-        if (recentRankData.rank != userdata.rank) {
-          val newUserdata = Userdata(userdata.channelId, userdata.matchId, recentRankData.rank)
-          info(s"Rank update for $user, rank data : $recentRankData")
-          if (userdata.rank != "Empty") {
-            notifyUser(user, userdata, recentRankData)
+        val newRankData = getRecentRank(user)
+        if (newRankData.rank != userdata.rank) {
+          val newUserdata = Userdata(userdata.channelId, userdata.matchId, newRankData.rank)
+          info(s"Rank update for $user, rank data : $newRankData")
+          if (userdata.rank != "Empty" && userdata.rank != "Unrated") {
+            notifyUser(user, userdata, newRankData)
           }
-          UserStore.updateRank(user, newUserdata)
+          UserStore.updateRank(user, newRankData.rank)
         }
       } catch {
         case ex: Exception => error(s"Failed to fetch rank data for user $user", ex)
