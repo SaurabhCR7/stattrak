@@ -153,6 +153,6 @@ object DiscordMsgGenerator {
   }
   
   private def formatListUsersMsg(users: List[User]) = {
-    users.map(user => user.toString + "\n").toString()
+    users.mkString("\n")
   }
 }
