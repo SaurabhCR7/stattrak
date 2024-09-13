@@ -30,7 +30,7 @@ class CommandHandler extends Logging {
     UserStore.remove(user)
     info(s"User $user unsubscribed Successfully")
   }
-  
+
   def list: List[User] = {
     try {
       UserStore.listUsers
