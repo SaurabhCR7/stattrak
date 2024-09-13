@@ -115,6 +115,16 @@ object DiscordMsgGenerator {
     DiscordEmbedMessage(channelId, messageEmbed)
   }
 
+  def getListUsersMsg(channelId: Long, users: List[User]): DiscordEmbedMessage = {
+    val messageEmbed = new EmbedBuilder()
+      .setAuthor("Users")
+      .setColor(Color.white)
+      .setDescription(formatListUsersMsg(users))
+      .setThumbnail(valorantThumbnail)
+      .build
+    DiscordEmbedMessage(channelId, messageEmbed)
+  }
+
 
   private def formatQuotedMsg(msg: String) = "> " + msg
 
@@ -140,5 +150,9 @@ object DiscordMsgGenerator {
       rankUpMsg
     }
     s"$greetingMsg \n\n **Elo** : `${rankDto.elo}`\n"
+  }
+  
+  private def formatListUsersMsg(users: List[User]) = {
+    users.map(user => user.toString + "\n").toString()
   }
 }

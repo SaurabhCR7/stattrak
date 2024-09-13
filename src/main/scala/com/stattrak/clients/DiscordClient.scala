@@ -2,7 +2,8 @@ package com.stattrak
 package clients
 
 import com.stattrak.models.{DiscordEmbedMessage, User, Userdata}
-import com.stattrak.subscriber.{CommandHandler, CommandType, Subscriber, SubscriberStatus}
+import com.stattrak.subscriber.{CommandHandler, CommandType, CommandValidator, SubscriberStatus}
+import com.stattrak.utils.DiscordMsgGenerator.*
 import com.stattrak.utils.{DiscordMsgGenerator, Logging}
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
@@ -18,7 +19,7 @@ object DiscordClient extends ListenerAdapter with Logging {
   source.close()
 
   private val jda = createJDA()
-  private val subscriber = new Subscriber
+  private val commandHandler = new CommandHandler
 
   def apply(): Unit = {
     jda.addEventListener(this)
@@ -32,13 +33,13 @@ object DiscordClient extends ListenerAdapter with Logging {
     if (!message.startsWith(">")) return
     val channelId = event.getChannel.getIdLong
 
-    val command = CommandHandler.getCommand(message)
+    val command = CommandValidator.getCommand(message)
     if (command == CommandType.invalid) {
       handleInvalidCommand(channelId, message)
       return
     }
 
-    val user = CommandHandler.getUser(message)
+    val user = CommandValidator.getUser(message)
 
     if (user.username == "Invalid") {
       handleInvalidUser(channelId, user)
@@ -49,7 +50,7 @@ object DiscordClient extends ListenerAdapter with Logging {
 
     command match {
       case CommandType.subscribe => {
-        val result = subscriber.subscribe(user, userdata)
+        val result = commandHandler.subscribe(user, userdata)
         result match {
           case SubscriberStatus.invalid => handleInvalidUser(channelId, user)
           case SubscriberStatus.failed => handleFailure(channelId, message)
@@ -58,8 +59,12 @@ object DiscordClient extends ListenerAdapter with Logging {
         }
       }
       case CommandType.unsubscribe => {
-        subscriber.unsubscribe(user)
+        commandHandler.unsubscribe(user)
         handleUserUnsubscribed(channelId, user)
+      }
+      case CommandType.list => {
+        val users = commandHandler.list
+        sendMessage(getListUsersMsg(channelId, users))
       }
       case CommandType.invalid => handleInvalidCommand(channelId, message)
     }
@@ -72,42 +77,42 @@ object DiscordClient extends ListenerAdapter with Logging {
 
   private def handleInvalidCommand(channelId: Long, message: String): Unit = {
     error(s"Invalid command found : $message")
-    val msg = DiscordMsgGenerator.getInvalidCommandMsg(channelId, message)
+    val msg = getInvalidCommandMsg(channelId, message)
     sendMessage(msg)
   }
 
   private def handleFailure(channelId: Long, message: String): Unit = {
     error(s"Failed while executing command : $message")
-    val msg = DiscordMsgGenerator.getFailureMsg(channelId, message)
+    val msg = getFailureMsg(channelId, message)
     sendMessage(msg)
   }
 
   private def handleInvalidUser(channelId: Long, user: User): Unit = {
     error(s"Invalid user found : $user")
-    val msg = DiscordMsgGenerator.getInvalidUserMsg(channelId, user.toString)
+    val msg = getInvalidUserMsg(channelId, user.toString)
     sendMessage(msg)
   }
 
   private def handleAlreadyExistsUser(channelId: Long, user: User): Unit = {
     warn(s"User already exists : $user")
-    val msg = DiscordMsgGenerator.getUserAlreadyExistsMsg(channelId, user.toString)
+    val msg = getUserAlreadyExistsMsg(channelId, user.toString)
     sendMessage(msg)
   }
 
   private def handleUserSubscribed(channelId: Long, user: User): Unit = {
     info(s"User is successfully subscribed  : $user")
-    val msg = DiscordMsgGenerator.getUserSubscribedMsg(channelId, user.toString)
+    val msg = getUserSubscribedMsg(channelId, user.toString)
     sendMessage(msg)
   }
 
   private def handleUserUnsubscribed(channelId: Long, user: User): Unit = {
     info(s"User is successfully unsubscribed  : $user")
-    val msg = DiscordMsgGenerator.getUserUnsubscribedMsg(channelId, user.toString)
+    val msg = getUserUnsubscribedMsg(channelId, user.toString)
     sendMessage(msg)
   }
   
   def handleUserExpired(channelId: Long, user: User): Unit = {
-    val msg = DiscordMsgGenerator.getUserExpiredMsg(channelId, user)
+    val msg = getUserExpiredMsg(channelId, user)
     sendMessage(msg)
   }
 

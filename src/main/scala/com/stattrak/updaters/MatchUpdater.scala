@@ -5,11 +5,15 @@ import com.stattrak.api.dto.{MatchDto, MatchResponse}
 import com.stattrak.clients.DiscordClient
 import com.stattrak.models.{User, Userdata}
 import com.stattrak.store.UserStore
-import com.stattrak.utils.{DiscordMsgGenerator, Logging}
+import com.stattrak.utils.{DiscordMsgGenerator, Logging, Throttler}
 
 class MatchUpdater extends Updater with Logging {
+
+  private val hourInMs = 60 * 60 * 1000
+  private val throttler = new Throttler(hourInMs)
+
   def checkForUpdate(): Unit = {
-    info("Checking for Match Updates")
+    throttler.throttle(info("Checking for Match Updates"))
     UserStore.cache.forEach((user, userdata) => {
       try {
         val newMatchData = getRecentMatch(user)
