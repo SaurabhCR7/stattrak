@@ -18,6 +18,8 @@ object CommandValidator extends Logging {
 
   def getUser(msg: String): User = {
     try {
+      if (msg == ">list")
+        return User("NA", "NA")
       val indexOfFirstSpace = msg.indexOf(" ")
       if (indexOfFirstSpace == -1) {
         User("Invalid", "Invalid")
