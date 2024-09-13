@@ -4,7 +4,7 @@ import com.stattrak.api.ValorantApi
 import com.stattrak.api.dto.{PatchDto, PatchResponse}
 import com.stattrak.clients.DiscordClient
 import com.stattrak.store.UserStore
-import com.stattrak.utils.{DiscordMsgGenerator, Logging}
+import com.stattrak.utils.{DiscordMsgGenerator, Logging, Throttler}
 
 import java.nio.file.{Files, Paths}
 import java.time.LocalDateTime
@@ -17,8 +17,11 @@ class PatchUpdater extends Updater with Logging {
   private var currentPatchTitle = readPatchTitleFromDisk
   private val path = Paths.get(patchStoreFilepath)
 
+  private val hourInMs = 60 * 60 * 1000
+  private val throttler = new Throttler(hourInMs)
+
   def checkForUpdate(): Unit = {
-    info("Checking for Patch Updates")
+    throttler.throttle(info("Checking for Patch Updates"))
     val channels = new mutable.HashSet[Long]()
     UserStore.cache.forEach((user, userdata) => channels.add(userdata.channelId))
     val recentPatchData = getRecentPatch

@@ -40,6 +40,18 @@ object ScyllaDbClient extends Logging {
         throw ex
     }
   }
+  
+  def getAllUsers: List[User] = {
+    try {
+      val query = s"SELECT userId FROM $keyspace.$tableName;"
+      val result = cqlSession.execute(query)
+      result.all().asScala.map(row => extractValorantUser(row)).toList
+    } catch {
+      case ex: Exception =>
+        error("Failed to get users from Database with error : ", ex)
+        throw ex
+    }
+  }
 
   def addUser(user: User, userdata: Userdata): Unit = {
     try {

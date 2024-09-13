@@ -52,4 +52,8 @@ object UserStore extends Logging {
       cache.put(user, userdata)
     }
   }
+  
+  def listUsers: List[User] = {
+    ScyllaDbClient.getAllUsers
+  }
 }

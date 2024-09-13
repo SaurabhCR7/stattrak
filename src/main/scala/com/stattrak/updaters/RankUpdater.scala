@@ -5,11 +5,15 @@ import com.stattrak.api.dto.{RankDto, RankResponse}
 import com.stattrak.clients.DiscordClient
 import com.stattrak.models.{User, Userdata}
 import com.stattrak.store.UserStore
-import com.stattrak.utils.{DiscordMsgGenerator, Logging}
+import com.stattrak.utils.{DiscordMsgGenerator, Logging, Throttler}
 
 class RankUpdater extends Updater with Logging {
+
+  private val hourInMs = 60 * 60 * 1000
+  private val throttler = new Throttler(hourInMs)
+  
   def checkForUpdate(): Unit = {
-    info("Checking for Rank updates")
+    throttler.throttle(info("Checking for Rank updates"))
     UserStore.cache.forEach((user, userdata) => {
       try {
         val newRankData = getRecentRank(user)

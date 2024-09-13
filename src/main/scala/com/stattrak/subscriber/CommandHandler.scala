@@ -1,49 +1,52 @@
 package com.stattrak
 package subscriber
 
-import com.stattrak.models.User
+import com.stattrak.api.ValorantApi.isUserValid
+import com.stattrak.models.{User, Userdata}
+import com.stattrak.store.UserStore
 import com.stattrak.utils.Logging
 
-object CommandHandler extends Logging {
+class CommandHandler extends Logging {
 
-  def getCommand(msg: String): CommandType.Value = {
-    val command = msg.split(" ")(0)
-    command match {
-      case ">subscribe" => CommandType.subscribe
-      case ">unsubscribe" => CommandType.unsubscribe
-      case _ => CommandType.invalid
+  def subscribe(user: User, userdata: Userdata): SubscriberStatus.Value = {
+    if (!isUserValid(user)) {
+      SubscriberStatus.invalid
+    } else if (UserStore.isPresent(user)) {
+      SubscriberStatus.alreadyExists
+    } else {
+      try {
+        val newUserData = Userdata(userdata.channelId, "Empty", "Empty")
+        UserStore.add(user, newUserData)
+        SubscriberStatus.successful
+      } catch {
+        case ex: Exception =>
+          error(s"Failed to subscribe user $user", ex)
+          SubscriberStatus.failed
+      }
     }
   }
 
-  def getUser(msg: String): User = {
+  def unsubscribe(user: User): Unit = {
+    UserStore.remove(user)
+    info(s"User $user unsubscribed Successfully")
+  }
+
+  def list: List[User] = {
     try {
-      val indexOfFirstSpace = msg.indexOf(" ")
-      if (indexOfFirstSpace == -1) {
-        User("Invalid", "Invalid")
-      } else {
-        val usernameWithTag = msg.substring(indexOfFirstSpace + 1)
-        val hashCount = usernameWithTag.count(ch => ch == '#')
-        if (hashCount == 1) {
-          val arr = usernameWithTag.split("#")
-          val username = arr(0).replace(" ", "%20")
-          val tag = arr(1)
-          info(s"User entered $username#$tag")
-          User(username, tag)
-        } else {
-          User("Invalid", "Invalid")
-        }
-      }
+      UserStore.listUsers
     } catch {
-      case ex: Exception => error("Invalid user entered", ex)
-        User("Invalid", "Invalid")
+      case ex: Exception =>
+        error("Failed to list users", ex)
+        List.empty
     }
   }
 }
 
-object CommandType extends Enumeration {
-  type command = Value
+object SubscriberStatus extends Enumeration {
+  type status = Value
 
-  val subscribe: CommandType.Value = Value(">subscribe")
-  val unsubscribe: CommandType.Value = Value(">unsubscribe")
-  val invalid: CommandType.Value = Value("")
+  val successful: SubscriberStatus.Value = Value("successful")
+  val invalid: SubscriberStatus.Value = Value("invalid")
+  val alreadyExists: SubscriberStatus.Value = Value("alreadyExists")
+  val failed: SubscriberStatus.Value = Value("failed")
 }
